@@ -1,0 +1,53 @@
+{{- if (or (or (list nil true | has .Values.image.repository) (not .Values.image.repository)) (or (list nil true | has .Values.image.tag) (not .Values.image.tag))) }}
+{{- fail "image.repository and image.tag must be defined" }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "web-app.fullname" . }}
+  labels:
+    {{- include "web-app.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "web-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "web-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.environment }}
+          env:
+            {{- range .Values.environment }}
+            - name: {{ .name }}
+              {{- if .valueFromSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}-secret
+                  key: {{ .valueFromSecret }}
+              {{- else }}
+              value: {{ .value | quote }}
+              {{- end }}
+            {{- end}}
+          {{- end }}
