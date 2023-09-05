@@ -15,12 +15,12 @@ service:
 ingress:
   enabled: false
   className: "nginx"
-  annotations: {}
-  hosts:
-    - host: example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
+  # annotations: {}
+  # hosts:
+  #   - host: example.local
+  #     paths:
+  #       - path: /
+  #         pathType: ImplementationSpecific
 
 resources:
   requests:
