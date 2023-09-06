@@ -22,6 +22,31 @@ ingress:
   #       - path: /
   #         pathType: ImplementationSpecific
 
+healthCheck:
+  enabled: true
+  path: /healthz
+  initialDelaySeconds: 15
+  periodSeconds: 15
+  timeoutSeconds: 1
+
+livenessProbe: {}
+
+readinessProbe:
+  path: ""
+  initialDelaySeconds: 0
+  periodSeconds: 0
+  timeoutSeconds: 0
+
+startupProbe: {}
+# startup probe can be specified by the client via values/appspec file
+#startupProbe:
+#  httpGet:
+#    path: /healthz/startup
+#    port: http
+#  periodSeconds: 10
+#  timeoutSeconds: 1
+#  failureThreshold: 3
+
 resources:
   requests:
     cpu: 150m

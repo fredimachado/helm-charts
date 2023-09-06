@@ -27,14 +27,36 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+        {{- if .Values.healthCheck.enabled }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | indent 12 }}
+          {{- else }}
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.healthCheck.path }}
               port: http
+            initialDelaySeconds: {{ .Values.healthCheck.initialDelaySeconds }}
+            periodSeconds: {{ .Values.healthCheck.periodSeconds }}
+            timeoutSeconds: {{ .Values.healthCheck.timeoutSeconds }}
+          {{- end }}
+          {{- if or (ne .Values.readinessProbe.path "") (ne .Values.healthCheck.path "") }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.readinessProbe.path | default .Values.healthCheck.path }}
               port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default .Values.healthCheck.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default .Values.healthCheck.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default .Values.healthCheck.timeoutSeconds }}
+          {{- else }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | indent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.startupProbe }}
+          startupProbe:
+            {{- toYaml .Values.startupProbe | indent 12 }}
+        {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.environment }}
