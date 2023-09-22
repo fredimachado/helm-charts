@@ -3,6 +3,16 @@ entries:
   web-app:
   - apiVersion: v2
     appVersion: "1"
+    created: "2023-09-22T03:03:54.412384137Z"
+    description: A Helm chart for a simple web app
+    digest: 8bc844b9eace9461f8b3b3180044259b27b7421ff0548df668f5c4ed706547be
+    name: web-app
+    type: application
+    urls:
+    - https://github.com/fredimachado/helm-charts/releases/download/web-app-0.7.0/web-app-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v2
+    appVersion: "1"
     created: "2023-09-20T13:24:43.108670469Z"
     description: A Helm chart for a simple web app
     digest: fae507816238e0d366413ef9219c7a968197c6515e51867fd81f5dc156d75d68
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/fredimachado/helm-charts/releases/download/web-app-0.6.0/web-app-0.6.0.tgz
     version: 0.6.0
-generated: "2023-09-20T13:24:43.108679868Z"
+generated: "2023-09-22T03:03:54.412393037Z"
