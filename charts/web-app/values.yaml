@@ -13,14 +13,12 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   className: "nginx"
-  # annotations: {}
-  # hosts:
-  #   - host: example.local
-  #     paths:
-  #       - path: /
-  #         pathType: ImplementationSpecific
+  path: "/"
+  hosts: []
+#   - test.example.com
+  annotations: {}
 
 healthCheck:
   enabled: true
